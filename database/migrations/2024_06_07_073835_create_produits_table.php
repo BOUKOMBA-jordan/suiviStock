@@ -21,10 +21,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('utilisateur_has_produit', function (Blueprint $table) {
+        Schema::create('utilisateur_has_produits', function (Blueprint $table) {
             $table->foreignIdFor(\App\Models\User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Produit::class)->constrained()->cascadeOnDelete();
-            $table->string('action')->unique();
+            $table->string('action');
             $table->integer('quantite')->nullable();
             $table->timestamps();
             $table->primary(['user_id', 'produit_id']);
@@ -36,7 +36,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('utilisateur_has_produit');
+        Schema::dropIfExists('utilisateur_has_produits');
         Schema::dropIfExists('produits');
     }
 };

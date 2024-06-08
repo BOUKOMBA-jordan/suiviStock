@@ -7,29 +7,35 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
  
 class Histogramme  extends Component {
 		render() {
+
+			 // Utiliser les données passées en tant que prop
+			 const { data } = this.props;
+
+			  // Transformer les données en dataPoints pour le graphique
+			  const dataPoints = data.map(item => ({
+				label: item.date,
+				y: parseInt(item.total_quantite, 10)
+			}));
+
+
 		const options = {
 			title: {
-				text: "Basic Column Chart"
+				text: "Vente en carton"
 			},
 			animationEnabled: true,
 			data: [
 			{
 				// Change type to "doughnut", "line", "splineArea", etc.
 				type: "column",
-				dataPoints: [
-					{ label: "Apple",  y: 10  },
-					{ label: "Orange", y: 15  },
-					{ label: "Banana", y: 25  },
-					{ label: "Mango",  y: 30  },
-					{ label: "Grape",  y: 28  }
-				]
+				dataPoints: dataPoints,
+				indexLabel: "{y}",
 			}
 			]
 		}
 		
 		return (
 		<div>
-			<h1>React Column Chart</h1>
+			
 			<CanvasJSChart options = {options} 
 				/* onRef={ref => this.chart = ref} */
 			/>
