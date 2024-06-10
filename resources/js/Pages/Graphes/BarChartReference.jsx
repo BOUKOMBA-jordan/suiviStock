@@ -5,18 +5,18 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class BarChart extends Component {
+class BarChartReference extends Component {
 	render() {
 		// Utiliser les données passées en tant que prop
 		const { data } = this.props;
 
 		// Trier les données par ordre décroissant du total des ventes
-		const sortedData = data.sort((a, b) => b.total_vente - a.total_vente);
+		const sortedData = data.sort((a, b) => b.total_quantite - a.total_quantite);
 
 		// Transformer les données triées en dataPoints pour le graphique
 		const dataPoints = sortedData.map(item => ({
-			label: item.user_name,
-			y: parseFloat(item.total_vente)
+			label: item.reference_produit,
+			y: parseFloat(item.total_quantite)
 		}));
 
 		const options = {
@@ -24,21 +24,22 @@ class BarChart extends Component {
 			animationEnabled: true,
 			theme: "light2",
 			title: {
-				text: "Total des ventes par commercial"
+				text: "Top Reférence"
 			},
 			axisX: {
-				title: "Commerciaux",
+				title: "Reférences",
 				reversed: true,
 			},
 			axisY: {
-				title: "Total des ventes",
-				labelFormatter: this.addSymbols
+				title: "Quantités",
+				labelFormatter: function () { return "" }, // Masquer les valeurs sur l'axe Y
+				gridThickness: 0 // Enlever les lignes de repère sur l'axe Y
 			},
 			data: [{
 				type: "bar",
-				indexLabel: "{y} FCFA",
+				indexLabel: "{y}",
 				dataPoints: dataPoints,
-				
+
 			}]
 		}
 
@@ -50,4 +51,4 @@ class BarChart extends Component {
 	}
 }
 
-export default BarChart;
+export default BarChartReference;

@@ -53,16 +53,80 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 });
 
-Route::get('/dashboard', function () {
+Route::get('/dashboard/{year}/{month}', function ($year, $month) {
+    // Votre logique de gestion du dashboard ici
 
-    $utilisateur_has_produits = Utilisateur_has_produit::select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(quantite) as total_quantite'))
+    //$year = 2024;
+    //$month = 06;
+    
+    // Requête existante pour les quantités totales par jour
+    /*$utilisateur_has_produits = Utilisateur_has_produit::select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(quantite) as total_quantite'))
         ->where('action', 'vente')
         ->groupBy(DB::raw('DATE(created_at)'))
+        ->get();*/
+
+        // Requête existante pour les quantités totales par jour
+    $utilisateur_has_produits = Utilisateur_has_produit::select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(quantite) as total_quantite'))
+    ->where('action', 'vente')
+    ->whereYear('created_at', $year)
+    ->whereMonth('created_at', $month)
+    ->groupBy(DB::raw('DATE(created_at)'))
+    ->get();
+
+    // Nouvelle requête pour la somme des ventes par utilisateur
+    $total_ventes_par_utilisateur = DB::table('utilisateur_has_produits as uhp')
+        ->join('users as u', 'uhp.user_id', '=', 'u.id')
+        ->join('produits as p', 'uhp.produit_id', '=', 'p.id')
+        ->select(
+            'uhp.user_id', 
+            'u.name as user_name',
+            DB::raw('SUM(p.prixVente * uhp.quantite) as total_vente')
+        )
+        ->where('uhp.action', 'vente')
+        ->groupBy('uhp.user_id', 'u.name')
         ->get();
-    
+
+        $ventes_totales_par_jour = DB::table('utilisateur_has_produits as uhp')
+    ->join('produits as p', 'uhp.produit_id', '=', 'p.id')
+    ->select(
+        DB::raw('DATE(uhp.created_at) as date'),
+        DB::raw('SUM(p.prixVente * uhp.quantite) as total_vente')
+    )
+    ->where('uhp.action', 'vente')
+    ->groupBy(DB::raw('DATE(uhp.created_at)'))
+    ->orderBy(DB::raw('DATE(uhp.created_at)'), 'asc')
+    ->get();
+
+    $results = DB::table('utilisateur_has_produits as uhp')
+    ->join('produits as p', 'uhp.produit_id', '=', 'p.id')
+    ->select('p.reference as reference_produit', DB::raw('SUM(uhp.quantite) as total_quantite'))
+    ->where('uhp.action', 'vente')
+    ->groupBy('uhp.produit_id', 'p.reference')
+    ->orderByDesc('total_quantite')
+    ->get();
+
+    $ventes_par_mois_par_utilisateur = DB::table('utilisateur_has_produits as uhp')
+    ->join('users as u', 'uhp.user_id', '=', 'u.id')
+    ->select(
+        'u.id as user_id',
+        'u.name as user_name',
+        DB::raw('YEAR(uhp.created_at) as year'),
+        DB::raw('MONTH(uhp.created_at) as month'),
+        DB::raw('SUM(uhp.quantite) as total_quantite')
+    )
+    ->where('uhp.action', 'vente')
+    ->groupBy('u.id', 'u.name', DB::raw('YEAR(uhp.created_at)'), DB::raw('MONTH(uhp.created_at)'))
+    ->orderBy('u.id')
+    ->orderBy(DB::raw('YEAR(uhp.created_at)'))
+    ->orderBy(DB::raw('MONTH(uhp.created_at)'))
+    ->get();
 
     return inertia('Dashboard', [
         'utilisateur_has_produits' => $utilisateur_has_produits,
+        'total_ventes_par_utilisateur' => $total_ventes_par_utilisateur,
+        'ventes_totales_par_jour' => $ventes_totales_par_jour,
+        'results' => $results,
+        'ventes_par_mois_par_utilisateur' => $ventes_par_mois_par_utilisateur
     ]);
 
     // return Inertia::render('Dashboard');

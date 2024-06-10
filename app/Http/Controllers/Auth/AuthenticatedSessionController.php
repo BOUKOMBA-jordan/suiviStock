@@ -16,6 +16,8 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
+    
+     
     public function create(): Response
     {
         return Inertia::render('Auth/Login', [
@@ -29,11 +31,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        $year = 2024;
+        $month = 05;
+    
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        //return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('dashboard', ['year' => $year, 'month' => $month], absolute: false))->with(['year' => $year, 'month' => $month]);
+
     }
 
     /**

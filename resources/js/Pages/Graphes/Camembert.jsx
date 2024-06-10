@@ -32,7 +32,6 @@ class Camembert extends Component {
 		
 		return (
 		<div>
-			<h1>React Pie Chart with Index Labels Placed Inside</h1>
 			<CanvasJSChart options = {options} 
 				/* onRef={ref => this.chart = ref} */
 			/>

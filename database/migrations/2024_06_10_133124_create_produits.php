@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('action');
             $table->integer('quantite')->nullable();
             $table->timestamps();
-            $table->primary(['user_id', 'produit_id']);
+           
         });
     }
 
