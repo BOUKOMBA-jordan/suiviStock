@@ -2,3 +2,6 @@
 a[href="https://canvasjs.com/"] {
 	display: none !important;
 }
+.chiffreDaffaire{
+	font-weight: bold;
+}

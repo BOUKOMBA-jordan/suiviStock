@@ -49,6 +49,8 @@ export default function Dashboard({ auth, utilisateur_has_produits, total_ventes
         ];
         return monthNames[monthNumber - 1];
     };
+    const formattedAmount = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF' }).format(sommeTotale);
+
 
   
     
@@ -79,10 +81,10 @@ export default function Dashboard({ auth, utilisateur_has_produits, total_ventes
                             </select>
                         </div>
                         <div className="col-lg-4">
-                            <p className="mb-0">Cartons : {quantiteTotale}</p>
+                            <p className="mb-0 chiffreDaffaire">Cartons : {quantiteTotale}</p>
                         </div>
                         <div className="col-lg-4">
-                            <p className="mb-0">Chiffre d'Affaire : {sommeTotale}</p>
+                            <p className="mb-0 chiffreDaffaire">Chiffre d'Affaire :  {formattedAmount}</p>
                         </div>
                     </div>
                 </div>
