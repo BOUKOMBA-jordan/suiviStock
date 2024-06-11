@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CanvasJSReact from '@canvasjs/react-charts';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class DoughnutChart extends Component {
+class DoughnutChart1 extends Component {
 	render() {
 
 		// Utiliser les données passées en tant que prop
@@ -11,19 +11,19 @@ class DoughnutChart extends Component {
 		// Transformer les données en dataPoints pour le graphique
 		const dataPoints = [
 			{
-				name: 'Autre référence', y: 100 - parseFloat(data.pourcentage_cereales_vendues), color: 'transparent'
+				name: 'Autre référence', y: 100 - parseFloat(data.pourcentage_Lait_infantile), color: 'transparent'
 			},
 	
 			{
 				name: 'Cereale',
-				y: parseFloat(data.pourcentage_cereales_vendues), color: 'blue' // Assurez-vous de convertir en nombre
+				y: parseFloat(data.pourcentage_Lait_infantile), color: 'blue' // Assurez-vous de convertir en nombre
 			},
 		];
 
 		const options = {
 			animationEnabled: true,
 			title: {
-				text: "Céréale "
+				text: "Lait Infantile "
 			},
 			
 			data: [
@@ -53,4 +53,4 @@ class DoughnutChart extends Component {
 	}
 }
 
-export default DoughnutChart;
+export default DoughnutChart1;

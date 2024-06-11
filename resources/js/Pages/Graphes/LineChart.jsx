@@ -22,11 +22,14 @@ class LineChart extends Component {
             },
             axisY: {
                 includeZero: true,
-                suffix: "FCFA"
+                suffix: "FCFA",
             },
             axisX: {
                 title: "Date",
-                
+                valueFormatString: "DD MMM YYYY",  // Format d'affichage des dates
+                interval: 1,
+                intervalType: "day", // Ensure the interval type is set to day to avoid repeating dates
+                labelAngle: -45 // Angler les étiquettes pour éviter les chevauchements
             },
             data: [{
                 type: "line",
@@ -37,7 +40,9 @@ class LineChart extends Component {
         }
 
         return (
+            
             <div>
+                
                 <CanvasJSChart options={options} />
             </div>
         );
